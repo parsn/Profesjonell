@@ -8,10 +8,14 @@
 - **Guild Sync**: Synchronizes known recipes with other guild members using an efficient, multi-phase protocol that minimizes addon channel traffic (see [Syncing](#syncing) below).
 - **Tooltip Integration**: Shows "Known by" information directly on item and recipe tooltips. Works with default UI, pfUI, and other UI overhauls. Also supports AtlasLoot tooltips.
 - **Recipe Search Window**: Browse and filter all known guild recipes in a two-pane window with category filtering, text search, rarity coloring, and chat linking.
+- **Favorites**: Mark recipes (e.g. Greater Fire Protection Potion, Elixir of the Giants) as favorites with an Alt-click and find them again on a dedicated tab, grouped into Item Enhancement, Items and Consumables.
+- **My Crafts**: Keep a list of your own characters (they can be on different accounts) and see everything they can craft in one place.
 - **In-Game Search**: Search the guild database via slash commands or guild chat queries, with partial name matching and multi-match display.
 - **Officer Tools**: Manual management tools for guild officers to add/remove recipes or purge characters no longer in the guild.
 - **Smart Replies**: Automatically responds to guild chat queries (e.g., `?prof [Link]`) with built-in anti-collision logic.
 - **Database Safety**: Automatically wipes local data if you change guilds to prevent data leakage between different guilds.
+
+
 
 ## Usage
 
@@ -27,11 +31,38 @@ Type `/prof` without any arguments to open the recipe search window. This provid
 
 ![Search Window](SearchWindowScreenshot.png)
 
-- **Text Filter**: Type in the search box at the top to filter recipes by name.
+The window has three tabs along the bottom: **Search**, **Favorites** and **My Crafts**. The text filter at the top works on all three tabs.
+
+#### Search tab
+
+The standard recipe browser.
+
+- **Text Filter**: Type in the search box at the top to filter recipes by name or by the name of a crafter.
 - **Category Filter**: The left pane groups recipes by type — Item Enhancement, Equipment, Consumable, and Other — each showing the number of matching recipes. Click a category to filter, or select "All" to see everything.
 - **Recipe List**: The right pane displays matching recipes alphabetically, colored by rarity, with the names of guild members who know each recipe listed below.
 - **Tooltips**: Hover over a recipe to see its full tooltip (item-based recipes only).
+- **Details**: Click a recipe to open a detail panel with its tooltip and every guild member who knows it (online members first, with a whisper button).
 - **Chat Linking**: Shift-click a recipe to insert its link into chat.
+- **Favorites**: Alt-click a recipe to add it to (or remove it from) your favorites. The star at the right of each row is lit for favorites; clicking the star does the same as Alt-click.
+
+#### Favorites tab
+
+Shows only the recipes you have marked as favorites. The left pane splits them into three categories, each with a count:
+
+- **Item Enhancement** — enchants, buckles, spikes, scopes and similar.
+- **Items** — equipment and any other item that is not an enhancement or a consumable.
+- **Consumables** — potions, elixirs, flasks, oils, stones and similar.
+
+Alt-click a recipe here to remove it from your favorites. A recipe can only be favorited while at least one guild member is known to craft it.
+
+#### My Crafts tab
+
+Shows what *your own* characters can craft.
+
+- **Add a character**: Type a character name in the box at the top of the left pane and press Enter (or click *Add*). Names are case-insensitive. The characters do not need to be on the same account, but they must be guild members whose recipes have been synced to you. Your current character is added automatically the first time you open the tab.
+- **Select**: Click a character to see only its recipes, or choose "All characters" to see everything your characters can craft. The number next to each name is its recipe count.
+- **Remove**: Click the red **x** next to a name to remove the character from the list.
+- Recipes are listed with the name(s) of *your* characters that know them. Click a recipe to see every guild member who can craft it.
 
 On first open, the window performs a one-time scan to categorize recipes, shown with a progress bar.
 
@@ -57,6 +88,8 @@ The `/profesjonell` alias also works for all commands.
 ## Data & Syncing
 
 Recipe data is stored in your `SavedVariables` (usually `WTF\Account\[ACCOUNT]\SavedVariables\Profesjonell.lua`).
+
+Your **favorites** and your **My Crafts character list** are stored locally in the same SavedVariables file (`ProfesjonellConfig`). They are personal: they are never synced to other guild members and are not wiped when the guild database is reset.
 
 ### Syncing
 
@@ -87,7 +120,7 @@ Modules/
   Scanner.lua             -- Recipe link resolution and scanning logic
   Comm.lua                -- Addon-to-addon sync protocol
   UI.lua                  -- Tooltips, slash commands, and chat integration
-  SearchWindow.lua        -- Recipe search/browse window
+  SearchWindow.lua        -- Recipe window: Search, Favorites and My Crafts tabs
 ```
 
 ## Development
